@@ -21,9 +21,9 @@ namespace TrashCollector.ActionFilters
             var controller = context.RouteData.Values["controller"];
             if (controller.Equals("Home"))
             {
-                if (_claimsPrincipal.IsInRole("customer"))
+                if (_claimsPrincipal.IsInRole("Customer"))
                 {
-                    context.Result = new RedirectToActionResult("Index", "Employees", null);
+                    context.Result = new RedirectToActionResult("Index", "Customers", null);
                 }
                 else if (_claimsPrincipal.IsInRole("Employee"))
                 {
