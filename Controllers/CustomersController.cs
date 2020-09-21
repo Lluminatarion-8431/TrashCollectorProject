@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,23 +21,33 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            Customer customer = new Customer();
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer = _context.Customers.Where(e => e.IdentityUserId == userId).Single();
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Create");
+            }
+
+            return View(customer);
         }
 
         // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+            var customer = _context.Customers.Include(c => c.IdentityUser).FirstOrDefaultAsync(m => m.CustomerId == id);
+
             if (customer == null)
             {
                 return NotFound();
@@ -48,8 +59,15 @@ namespace TrashCollector.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            Customer customer = new Customer();
+            List<DayOfWeek> dayOfWeek = new List<DayOfWeek>();
+            dayOfWeek.Add(DayOfWeek.Monday);
+            dayOfWeek.Add(DayOfWeek.Tuesday);
+            dayOfWeek.Add(DayOfWeek.Wednesday);
+            dayOfWeek.Add(DayOfWeek.Thursday);
+            dayOfWeek.Add(DayOfWeek.Friday);
+            ViewBag.DaysOfWeek = new SelectList(dayOfWeek, customer.TrashPickUpDay);
+            return View(customer);
         }
 
         // POST: Customers/Create
@@ -61,28 +79,28 @@ namespace TrashCollector.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer.IdentityUserId = userId;
+
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Customer customer = _context.Customers.Where(c => c.IdentityUserId == userId).Single();
+            List<DayOfWeek> dayOfWeek = new List<DayOfWeek>();
+            dayOfWeek.Add(DayOfWeek.Monday);
+            dayOfWeek.Add(DayOfWeek.Tuesday);
+            dayOfWeek.Add(DayOfWeek.Wednesday);
+            dayOfWeek.Add(DayOfWeek.Thursday);
+            dayOfWeek.Add(DayOfWeek.Friday);
+            ViewBag.DaysOfWeek = new SelectList(dayOfWeek, customer.TrashPickUpDay);
             return View(customer);
         }
 
@@ -102,7 +120,19 @@ namespace TrashCollector.Controllers
             {
                 try
                 {
-                    _context.Update(customer);
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    Customer customerFromDb = _context.Customers.Where(c => c.IdentityUserId == userId).Single();
+                    customerFromDb.FirstName = customer.FirstName;
+                    customerFromDb.LastName = customer.LastName;
+                    customerFromDb.StreetName = customer.StreetName;
+                    customerFromDb.City = customer.City;
+                    customerFromDb.State = customer.State;
+                    customerFromDb.ZipCode = customer.ZipCode;
+                    customerFromDb.PickupConfirmed = customer.PickupConfirmed;
+                    customerFromDb.ExtraPickUpRequest = customer.ExtraPickUpRequest;
+                    customerFromDb.TrashPickUpDay = customer.TrashPickUpDay;
+                    customerFromDb.StartDate = customer.StartDate;
+                    customerFromDb.EndDate = customer.EndDate;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
