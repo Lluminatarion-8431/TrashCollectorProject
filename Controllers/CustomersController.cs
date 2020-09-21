@@ -90,7 +90,7 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Customer customer = _context.Customers.Where(c => c.IdentityUserId == userId).Single();
@@ -153,22 +153,22 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
+            var deletedCustomer = _context.Customers.Where(c => c.CustomerId == id).FirstOrDefault();
+            _context.Customers.Remove(deletedCustomer);
+            _context.SaveChanges();
+            if (deletedCustomer == null)
             {
                 return NotFound();
             }
 
-            return View(customer);
+            return View(deletedCustomer);
         }
 
         // POST: Customers/Delete/5
