@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollector.Data;
 
-namespace TrashCollector.Data.Migrations
+namespace TrashCollector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -48,8 +48,8 @@ namespace TrashCollector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e1f44f63-7f27-4810-a3a1-59674caad661",
-                            ConcurrencyStamp = "0b01652f-aa2e-4d82-be1d-895ef38ab997",
+                            Id = "afa917e7-5053-4801-855f-a32f1e62274d",
+                            ConcurrencyStamp = "5ccbba51-aa0a-49f9-b14d-eac3ab4318de",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -237,11 +237,11 @@ namespace TrashCollector.Data.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EndPickUpSuspension")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("ExtraPickUpRequest")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("ExtraPickUpRequest")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -252,17 +252,20 @@ namespace TrashCollector.Data.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StartPickUpSuspension")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool?>("PickupConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Street")
+                    b.Property<string>("StreetName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TrashPickUpDay")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TrashPickUpDay")
+                        .HasColumnType("int");
 
                     b.Property<int>("ZipCode")
                         .HasColumnType("int");

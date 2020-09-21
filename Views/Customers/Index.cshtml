@@ -20,7 +20,7 @@
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Street)
+                @Html.DisplayNameFor(model => model.StreetName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.City)
@@ -32,19 +32,22 @@
                 @Html.DisplayNameFor(model => model.ZipCode)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.PickupConfirmed)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TrashPickUpDay)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ExtraPickUpRequest)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.AccountBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartPickUpSuspension)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndPickUpSuspension)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IdentityUser)
@@ -62,7 +65,7 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Street)
+                @Html.DisplayFor(modelItem => item.StreetName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.City)
@@ -74,19 +77,22 @@
                 @Html.DisplayFor(modelItem => item.ZipCode)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.PickupConfirmed)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.TrashPickUpDay)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ExtraPickUpRequest)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.AccountBalance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartPickUpSuspension)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndPickUpSuspension)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdentityUser.Id)

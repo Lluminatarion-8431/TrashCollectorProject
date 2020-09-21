@@ -17,25 +17,37 @@ namespace TrashCollector.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        public string Street { get; set; }
+        [Display(Name = "Full Address")]
+        public string StreetName { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         [Display(Name = "Zip Code")]
         public int ZipCode { get; set; }
 
+        public bool? PickupConfirmed { get; set; }
+
+
         [Display(Name = "Pickup day (required)")]
-        public string TrashPickUpDay { get; set; }
+        public DayOfWeek TrashPickUpDay { get; set; }
 
-        [Display(Name = "One-time pickup date (optional) (i.e. MM/DD/YYYY)")]
-        public int ExtraPickUpRequest { get; set; }
-
-        [Display(Name = "Due balance on account")]
-        public double AccountBalance { get; set; }
+        [Display(Name = "One-time pickup date (optional)")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? ExtraPickUpRequest { get; set; }
 
         [Display(Name = "Pickup suspension start date (optional)")]
-        public string StartPickUpSuspension { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? StartDate { get; set; }
+
         [Display(Name = "Pickup suspension end date (optional)")]
-        public string EndPickUpSuspension { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? EndDate { get; set; }
+
+        [Display(Name = "Due balance on account")]
+        [DataType(DataType.Currency)]
+        public double AccountBalance { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }

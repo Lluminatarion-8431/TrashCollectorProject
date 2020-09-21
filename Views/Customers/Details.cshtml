@@ -24,10 +24,10 @@
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Street)
+            @Html.DisplayNameFor(model => model.StreetName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Street)
+            @Html.DisplayFor(model => model.StreetName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.City)
@@ -48,6 +48,12 @@
             @Html.DisplayFor(model => model.ZipCode)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PickupConfirmed)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PickupConfirmed)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TrashPickUpDay)
         </dt>
         <dd class = "col-sm-10">
@@ -60,22 +66,22 @@
             @Html.DisplayFor(model => model.ExtraPickUpRequest)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.AccountBalance)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.AccountBalance)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartPickUpSuspension)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartPickUpSuspension)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndPickUpSuspension)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndPickUpSuspension)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.IdentityUser)

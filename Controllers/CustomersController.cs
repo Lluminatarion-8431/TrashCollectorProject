@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,18 +20,10 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var customer = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
-            if (customer == null)
-            {
-                return View("Create");
-            }
-            else
-            {
-                return View(customer);
-            }
+            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Customers/Details/5
@@ -66,12 +57,10 @@ namespace TrashCollector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Street,City,State,ZipCode,TrashPickUpDay,ExtraPickUpRequest,AccountBalance,StartPickUpSuspension,EndPickUpSuspension,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,StreetName,City,State,ZipCode,PickupConfirmed,TrashPickUpDay,ExtraPickUpRequest,StartDate,EndDate,AccountBalance,IdentityUserId")] Customer customer)
         {
             if (ModelState.IsValid)
             {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                customer.IdentityUserId = userId;
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -102,7 +91,7 @@ namespace TrashCollector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Street,City,State,ZipCode,TrashPickUpDay,ExtraPickUpRequest,AccountBalance,StartPickUpSuspension,EndPickUpSuspension,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,StreetName,City,State,ZipCode,PickupConfirmed,TrashPickUpDay,ExtraPickUpRequest,StartDate,EndDate,AccountBalance,IdentityUserId")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
@@ -112,7 +101,7 @@ namespace TrashCollector.Controllers
             if (ModelState.IsValid)
             {
                 try
-                { 
+                {
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }
