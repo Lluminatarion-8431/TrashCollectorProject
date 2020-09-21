@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ using TrashCollector.Models;
 
 namespace TrashCollector.Controllers
 {
+    [Authorize(Roles = "Employee")]
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,10 +23,32 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).Single();
+            //returning to the Index view a IEnumerable<Customer> -- i.e. List<Customer>
+
+            //only customers that have same zip code as currently logged in employee
+            var customersInZipCode = _context.Customers.Where(c => c.ZipCode == employeeLoggedIn.ZipCode).ToList();
+
+            //only customers that don't have suspended service today
+
+            //only customers with one-time pick-up that is set for the day
+            var oneTimeCustomers = _context.Customers.Where(c => c.ExtraPickUpRequest == today).ToList();
+
+            //only customers tha have a pickup day set to today
+            var today = DateTime.Now.DayOfWeek.ToString();
+            var customersInZipForToday = customersInZipCode.Where(c => c.TrashPickUpDay = today).ToList();
+
+            return View();
+        }
+        public IActionResult ConfirmPickup(int CustomerId)
+        {
+            var customerFromDb = _context.Customers.Where(c => c.CustomerId == CustomerId).SingleOrDefault();
+            customerFromDb.AccountBalance += 15;
+            _context.SaveChanges();
+            return View(customerFromDb);
         }
 
         // GET: Employees/Details/5
