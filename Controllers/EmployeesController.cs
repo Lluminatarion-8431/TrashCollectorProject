@@ -25,11 +25,15 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public IActionResult Index()
         {
-            Employee employee = new Employee();
-            try
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+
+            if (employeeLoggedIn.Name == null)
             {
-                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).Single();
+                return View("Create");
+            }
+            else
+            {
                 //returning to the Index view a IEnumerable<Customer> -- i.e. List<Customer>
 
                 //only customers tha have a pickup day set to today
@@ -44,23 +48,18 @@ namespace TrashCollector.Controllers
 
                 //only customers with one-time pick-up that is set for the day
                 var oneTimeCustomers = _context.Customers.Where(c => c.ExtraPickUpRequest == today.Date).ToList();
-                
+
                 foreach (var item in oneTimeCustomers)
                 {
                     customersInZipCode.Add(item);
                 }
                 return View(customersInZipCode);
             }
-            catch (Exception)
-            {
-
-                return RedirectToAction("Create");
-            }
-
-           
 
 
-           
+
+
+
         }
         public IActionResult ConfirmPickup(int CustomerId)
         {
