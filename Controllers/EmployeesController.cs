@@ -25,29 +25,42 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public IActionResult Index()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).Single();
-            //returning to the Index view a IEnumerable<Customer> -- i.e. List<Customer>
-
-            //only customers tha have a pickup day set to today
-            var today = DateTime.Today.Date;
-
-            //only customers that don't have suspended service today
-            var customersWithNonSuspension = _context.Customers.Where(c => c.StartDate < today && c.EndDate < today).ToList();
-
-            //only customers that have same zip code as currently logged in employee
-            var customersInZipCode = customersWithNonSuspension.Where(c => c.ZipCode == employeeLoggedIn.ZipCode && c.TrashPickUpDay ==
-            today.DayOfWeek).ToList();
-
-            //only customers with one-time pick-up that is set for the day
-            var oneTimeCustomers = _context.Customers.Where(c => c.ExtraPickUpRequest == today.Date).ToList();
-
-
-            foreach (var item in oneTimeCustomers)
+            Employee employee = new Employee();
+            try
             {
-                customersInZipCode.Add(item);
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).Single();
+                //returning to the Index view a IEnumerable<Customer> -- i.e. List<Customer>
+
+                //only customers tha have a pickup day set to today
+                var today = DateTime.Today.Date;
+
+                //only customers that don't have suspended service today
+                var customersWithNonSuspension = _context.Customers.Where(c => c.StartDate < today && c.EndDate < today).ToList();
+
+                //only customers that have same zip code as currently logged in employee
+                var customersInZipCode = customersWithNonSuspension.Where(c => c.ZipCode == employeeLoggedIn.ZipCode && c.TrashPickUpDay ==
+                today.DayOfWeek).ToList();
+
+                //only customers with one-time pick-up that is set for the day
+                var oneTimeCustomers = _context.Customers.Where(c => c.ExtraPickUpRequest == today.Date).ToList();
+                
+                foreach (var item in oneTimeCustomers)
+                {
+                    customersInZipCode.Add(item);
+                }
+                return View(customersInZipCode);
             }
-            return View(customersInZipCode);
+            catch (Exception)
+            {
+
+                return RedirectToAction("Create");
+            }
+
+           
+
+
+           
         }
         public IActionResult ConfirmPickup(int CustomerId)
         {
