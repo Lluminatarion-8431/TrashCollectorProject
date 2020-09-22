@@ -24,8 +24,18 @@ namespace TrashCollector.Data
                 {
                     Name = "Admin",
                     NormalizedName = "ADMIN"
+                },
+                new IdentityRole
+                {
+                    Name = "Customer",
+                    NormalizedName = "CUSTOMER"
+                },
+                new IdentityRole
+                {
+                    Name = "Employee",
+                    NormalizedName = "EMPLOYEE"
                 }
-                );
+            );
         }
 
         public DbSet<Customer> Customers { get; set; }

@@ -12,12 +12,13 @@ namespace TrashCollector.Models
     {
         [Key]
         public int CustomerId { get; set; }
-        [Display(Name = "First Name")]
+        [Display(Name = "First Name(required)")]
         public string FirstName { get; set; }
-        [Display(Name = "Last Name")]
+        [Display(Name = "Last Name(required)")]
         public string LastName { get; set; }
 
-        [Display(Name = "Full Address")]
+        [Display(Name = "Full Address(required)")]
+        public int StreetNumber { get; set; }
         public string StreetName { get; set; }
         public string City { get; set; }
         public string State { get; set; }
