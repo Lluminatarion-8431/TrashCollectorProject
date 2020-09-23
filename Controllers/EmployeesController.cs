@@ -25,7 +25,7 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public IActionResult Index()
         {
-            /*var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);*/
+            //var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
 
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -88,11 +88,15 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            return View("Index", employee);
+            return View(employee);
         }
 
         // GET: Employees/Create
-
+        public IActionResult Create()
+        {
+            Employee employee = new Employee();
+            return View(employee);
+        }
         // POST: Employees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -127,7 +131,7 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
-            return View("Index", employee);
+            return View(employee);
         }
 
         // POST: Employees/Edit/5

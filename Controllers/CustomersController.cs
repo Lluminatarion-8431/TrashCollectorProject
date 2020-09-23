@@ -83,7 +83,7 @@ namespace TrashCollector.Controllers
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 customer.IdentityUserId = userId;
-
+               
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
