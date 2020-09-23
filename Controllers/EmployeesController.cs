@@ -25,22 +25,25 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public IActionResult Index()
         {
+            /*var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);*/
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
 
-            if (employeeLoggedIn.Name == null)
+            if (employeeLoggedIn == null)
             {
-                return View("Create");
+                return RedirectToAction("Create");
             }
             else
             {
                 //returning to the Index view a IEnumerable<Customer> -- i.e. List<Customer>
-
+                //var customers = _context.Customers.Include(c => c.IdentityUserId).ToList();
                 //only customers tha have a pickup day set to today
                 var today = DateTime.Today.Date;
 
                 //only customers that don't have suspended service today
-                var customersWithNonSuspension = _context.Customers.Where(c => c.StartDate < today && c.EndDate < today).ToList();
+                var customersWithNonSuspension = _context.Customers.Where(c => c.StartDate > today && c.EndDate < today && c.PickupConfirmed == false).ToList();
 
                 //only customers that have same zip code as currently logged in employee
                 var customersInZipCode = customersWithNonSuspension.Where(c => c.ZipCode == employeeLoggedIn.ZipCode && c.TrashPickUpDay ==
@@ -85,15 +88,10 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
 
-            return View(employee);
+            return View("Index", employee);
         }
 
         // GET: Employees/Create
-        public IActionResult Create()
-        {
-            Employee employee = new Employee();
-            return View(employee);
-        }
 
         // POST: Employees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -112,7 +110,7 @@ namespace TrashCollector.Controllers
                 return RedirectToAction("Index");
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
-            return View(employee);
+            return View("Index", employee);
         }
 
         // GET: Employees/Edit/5
@@ -129,7 +127,7 @@ namespace TrashCollector.Controllers
                 return NotFound();
             }
             ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
-            return View(employee);
+            return View("Index", employee);
         }
 
         // POST: Employees/Edit/5

@@ -25,11 +25,11 @@ namespace TrashCollector.Controllers
         // GET: Customers
         public IActionResult Index()
         {
-            Customer customer = new Customer();
+            Customer customer = null;
             try
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                customer = _context.Customers.Where(e => e.IdentityUserId == userId).Single();
+                customer = _context.Customers.Where(c => c.IdentityUserId == userId).Single();
             }
             catch (Exception)
             {
