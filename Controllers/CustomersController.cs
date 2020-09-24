@@ -37,7 +37,7 @@ namespace TrashCollector.Controllers
                 return RedirectToAction("Create");
             }
 
-            return View(customer);
+            return View("Details", customer);
         }
 
         // GET: Customers/Details/5
@@ -86,7 +86,7 @@ namespace TrashCollector.Controllers
                
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             return View(customer);
         }

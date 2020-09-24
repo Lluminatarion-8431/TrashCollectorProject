@@ -25,7 +25,7 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public IActionResult Index()
         {
-            //var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
+            var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
 
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -43,7 +43,7 @@ namespace TrashCollector.Controllers
                 var today = DateTime.Today.Date;
 
                 //only customers that don't have suspended service today
-                var customersWithNonSuspension = _context.Customers.Where(c => c.StartDate > today && c.EndDate < today && c.PickupConfirmed == false).ToList();
+                var customersWithNonSuspension = _context.Customers.Where(c => /*c.StartDate > today && c.EndDate < today &&*/ c.PickupConfirmed == false).ToList();
 
                 //only customers that have same zip code as currently logged in employee
                 var customersInZipCode = customersWithNonSuspension.Where(c => c.ZipCode == employeeLoggedIn.ZipCode && c.TrashPickUpDay ==
